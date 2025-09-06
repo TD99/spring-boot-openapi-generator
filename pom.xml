@@ -69,6 +69,7 @@
                             <apiPackage>dev.timduerr.openapigeneratorexample.api</apiPackage>
                             <modelPackage>dev.timduerr.openapigeneratorexample.model</modelPackage>
                             <invokerPackage>dev.timduerr.openapigeneratorexample.invoker</invokerPackage>
+                            <modelNameSuffix>Dto</modelNameSuffix>
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>

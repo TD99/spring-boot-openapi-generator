@@ -34,12 +34,33 @@ paths:
   /todos/{id}:
     get:
       operationId: getTodo
-      summary: Get todo
+      summary: Get specific todo
       parameters:
         - in: path
           name: id
           required: true
           schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Todo' }
+        '404':
+          description: Not Found
+    put:
+      operationId: updateTodo
+      summary: Update specific todo
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TodoCreate' }
       responses:
         '200':
           description: OK
