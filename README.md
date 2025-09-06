@@ -53,6 +53,7 @@ mvn spring-boot:run
 - PATCH /todos/{id}
 - DELETE /todos/{id}
 - Pagination/Sorting/Filtering
+- Minimal frontend for showcasing
 - Tests
 
 ## License
