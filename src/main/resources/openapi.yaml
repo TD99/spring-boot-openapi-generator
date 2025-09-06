@@ -7,6 +7,7 @@ servers:
 paths:
   /todos:
     get:
+      operationId: listTodos
       summary: List todos
       responses:
         '200':
@@ -17,6 +18,7 @@ paths:
                 type: array
                 items: { $ref: '#/components/schemas/Todo' }
     post:
+      operationId: createTodo
       summary: Create todo
       requestBody:
         required: true
@@ -31,6 +33,7 @@ paths:
               schema: { $ref: '#/components/schemas/Todo' }
   /todos/{id}:
     get:
+      operationId: getTodo
       summary: Get todo
       parameters:
         - in: path
