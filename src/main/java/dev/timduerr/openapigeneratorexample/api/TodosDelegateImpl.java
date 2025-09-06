@@ -4,9 +4,9 @@ import dev.timduerr.openapigeneratorexample.domain.TodoEntity;
 import dev.timduerr.openapigeneratorexample.domain.TodoRepository;
 import dev.timduerr.openapigeneratorexample.model.TodoCreateDto;
 import dev.timduerr.openapigeneratorexample.model.TodoDto;
+import dev.timduerr.openapigeneratorexample.model.TodoUpdateDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,5 +64,19 @@ public class TodosDelegateImpl implements TodosApiDelegate {
         TodoEntity newEntity = toEntity(todoCreateDto);
         TodoEntity savedEntity = todoRepository.save(newEntity);
         return ResponseEntity.ok(toDto(savedEntity));
+    }
+
+    @Override
+    public ResponseEntity<TodoDto> updateTodo(UUID id, TodoUpdateDto todoUpdateDto) {
+        Optional<TodoEntity> todoOptional = todoRepository.findById(id);
+
+        if (todoOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        TodoEntity todoEntity = todoOptional.get();
+        todoEntity.setTitle(todoUpdateDto.getTitle());
+        todoEntity.setCompleted(todoUpdateDto.getDone());
+        return ResponseEntity.ok(toDto(todoRepository.save(todoEntity)));
     }
 }

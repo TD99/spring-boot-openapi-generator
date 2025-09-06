@@ -60,7 +60,7 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/TodoCreate' }
+            schema: { $ref: '#/components/schemas/TodoUpdate' }
       responses:
         '200':
           description: OK
@@ -83,3 +83,9 @@ components:
       required: [title]
       properties:
         title: { type: string, minLength: 1 }
+    TodoUpdate:
+      type: object
+      required: [title, done]
+      properties:
+        title: { type: string, minLength: 1 }
+        done:  { type: boolean }
