@@ -61,30 +61,40 @@ paths:
           description: OK
           headers:
             X-Page:
-              schema: { type: integer, minimum: 0 }
+              schema:
+                type: integer
+                minimum: 0
               description: Current page index
             X-Size:
-              schema: { type: integer, minimum: 1 }
+              schema:
+                type: integer
+                minimum: 1
               description: Page size
             X-Total-Elements:
-              schema: { type: integer, format: int64 }
+              schema:
+                type: integer
+                format: int64
               description: Total number of elements
             X-Total-Pages:
-              schema: { type: integer, minimum: 0 }
+              schema:
+                type: integer
+                minimum: 0
               description: Total number of pages
             X-Sort:
-              schema: { type: string }
+              schema:
+                type: string
               description: DTO field used for sorting after validation/fallback
             X-Sort-Dir:
               schema:
                 type: string
-                enum: [ asc, desc ]
+                enum: [asc, desc]
               description: Sorting direction applied
           content:
             application/json:
               schema:
                 type: array
-                items: { $ref: '#/components/schemas/Todo' }
+                items:
+                  $ref: '#/components/schemas/Todo'
     post:
       operationId: createTodo
       summary: Create todo
@@ -92,19 +102,23 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/TodoCreate' }
+            schema:
+              $ref: '#/components/schemas/TodoCreate'
       responses:
         '201':
           description: Created
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Todo' }
+              schema:
+                $ref: '#/components/schemas/Todo'
   /todos/{id}:
     parameters:
       - in: path
         name: id
         required: true
-        schema: { type: string, format: uuid }
+        schema:
+          type: string
+          format: uuid
         example: 97dc478e-8272-48b6-9a89-909477e0f45e
 
     get:
@@ -115,7 +129,8 @@ paths:
           description: OK
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Todo' }
+              schema:
+                $ref: '#/components/schemas/Todo'
         '404':
           description: Not Found
     put:
@@ -125,13 +140,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/TodoUpdate' }
+            schema:
+              $ref: '#/components/schemas/TodoUpdate'
       responses:
         '200':
           description: OK
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Todo' }
+              schema:
+                $ref: '#/components/schemas/Todo'
         '404':
           description: Not Found
     patch:
@@ -141,13 +158,15 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/TodoPatch' }
+            schema:
+              $ref: '#/components/schemas/TodoPatch'
       responses:
         '200':
           description: OK
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Todo' }
+              schema:
+                $ref: '#/components/schemas/Todo'
         '404':
           description: Not Found
     delete:
@@ -164,23 +183,36 @@ components:
       type: object
       required: [id, title, completed]
       properties:
-        id:    { type: string, format: uuid }
-        title: { type: string, minLength: 1 }
-        completed:  { type: boolean }
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          minLength: 1
+        completed:
+          type: boolean
     TodoCreate:
       type: object
       required: [title]
       properties:
-        title: { type: string, minLength: 1 }
+        title:
+          type: string
+          minLength: 1
     TodoUpdate:
       type: object
       required: [title, completed]
       properties:
-        title: { type: string, minLength: 1 }
-        completed:  { type: boolean }
+        title:
+          type: string
+          minLength: 1
+        completed:
+          type: boolean
     TodoPatch:
       type: object
       required: []
       properties:
-        title: { type: string, minLength: 1 }
-        completed:  { type: boolean }
+        title:
+          type: string
+          minLength: 1
+        completed:
+          type: boolean
