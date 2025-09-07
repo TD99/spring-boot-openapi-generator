@@ -27,9 +27,59 @@ paths:
             minimum: 1
             maximum: 50
             default: 20
+        - in: query
+          name: sort
+          description: >
+            Sorting by a property name. Use JSON:API style.
+            If the provided property does not exist, the server falls
+            back to `title` (ascending).
+          required: false
+          schema:
+            type: string
+            default: title
+          examples:
+            id-asc:
+              value: id
+              summary: Sort by id (ascending)
+            id-desc:
+              value: -id
+              summary: Sort by id (descending)
+            title-asc:
+              value: title
+              summary: Sort by title (ascending)
+            title-desc:
+              value: -title
+              summary: Sort by title (descending)
+            completed-asc:
+              value: completed
+              summary: Sort by completed (ascending)
+            completed-desc:
+              value: -completed
+              summary: Sort by completed (descending)
       responses:
         '200':
           description: OK
+          headers:
+            X-Page:
+              schema: { type: integer, minimum: 0 }
+              description: Current page index
+            X-Size:
+              schema: { type: integer, minimum: 1 }
+              description: Page size
+            X-Total-Elements:
+              schema: { type: integer, format: int64 }
+              description: Total number of elements
+            X-Total-Pages:
+              schema: { type: integer, minimum: 0 }
+              description: Total number of pages
+            X-Sort:
+              schema: { type: string }
+              description: DTO field used for sorting after validation/fallback
+            X-Sort-Dir:
+              schema:
+                type: string
+                enum: [ asc, desc ]
+              description: Sorting direction applied
           content:
             application/json:
               schema:
@@ -55,6 +105,7 @@ paths:
         name: id
         required: true
         schema: { type: string, format: uuid }
+        example: 97dc478e-8272-48b6-9a89-909477e0f45e
 
     get:
       operationId: getTodo

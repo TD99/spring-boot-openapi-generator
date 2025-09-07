@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import static dev.timduerr.openapigeneratorexample.mapper.TodoMapper.*;
 import static dev.timduerr.openapigeneratorexample.web.PaginationHeaders.*;
+import static dev.timduerr.openapigeneratorexample.web.SortHeaders.X_SORT;
+import static dev.timduerr.openapigeneratorexample.web.SortHeaders.X_SORT_DIR;
 
 /**
  * TodosApiDelegateImpl.
@@ -36,12 +38,13 @@ public class TodosApiDelegateImpl implements TodosApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<TodoDto>> listTodos(Integer page, Integer size) {
+    public ResponseEntity<List<TodoDto>> listTodos(Integer page, Integer size, String sort) {
         int pageIndex = (page == null) ? 0 : Math.max(0, page);
         int pageSize = (size == null) ? 20 : Math.max(1, Math.min(50, size));
 
-        // TODO: Remove hardcoded sorting
-        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, Sort.by("title").ascending());
+        Sort.Order effectiveSortOrder = SortHelper.resolveSortOrder(TodoEntity.class, TodoDto.class, sort).ignoreCase();
+        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize, Sort.by(effectiveSortOrder));
+
         Page<TodoEntity> result = todoRepository.findAll(pageRequest);
 
         List<TodoDto> body = result.getContent().stream()
@@ -53,6 +56,8 @@ public class TodosApiDelegateImpl implements TodosApiDelegate {
                 .header(X_SIZE.getValue(), String.valueOf(pageSize))
                 .header(X_TOTAL_ELEMENTS.getValue(), String.valueOf(result.getTotalElements()))
                 .header(X_TOTAL_PAGES.getValue(), String.valueOf(result.getTotalPages()))
+                .header(X_SORT.getValue(), effectiveSortOrder.getProperty())
+                .header(X_SORT_DIR.getValue(), effectiveSortOrder.getDirection().name())
                 .body(body);
     }
 
