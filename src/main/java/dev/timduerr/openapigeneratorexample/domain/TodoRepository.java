@@ -12,5 +12,4 @@ import java.util.UUID;
  */
 public interface TodoRepository extends JpaRepository<TodoEntity, UUID> {
 
-
 }

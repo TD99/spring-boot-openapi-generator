@@ -2,6 +2,7 @@ package dev.timduerr.openapigeneratorexample.domain;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -12,7 +13,8 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "tbl_todo")
-public class TodoEntity {
+public class TodoEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)

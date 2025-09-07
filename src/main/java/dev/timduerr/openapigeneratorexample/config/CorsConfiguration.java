@@ -1,4 +1,4 @@
-package dev.timduerr.openapigeneratorexample;
+package dev.timduerr.openapigeneratorexample.config;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;

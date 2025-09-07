@@ -9,6 +9,24 @@ paths:
     get:
       operationId: listTodos
       summary: List todos
+      parameters:
+        - in: query
+          name: page
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - in: query
+          name: size
+          description: The size of the page to be returned
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
       responses:
         '200':
           description: OK
@@ -32,14 +50,15 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Todo' }
   /todos/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+
     get:
       operationId: getTodo
       summary: Get specific todo
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: string, format: uuid }
       responses:
         '200':
           description: OK
@@ -51,11 +70,6 @@ paths:
     put:
       operationId: updateTodo
       summary: Update specific todo
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema: { type: string, format: uuid }
       requestBody:
         required: true
         content:
@@ -69,15 +83,39 @@ paths:
               schema: { $ref: '#/components/schemas/Todo' }
         '404':
           description: Not Found
+    patch:
+      operationId: patchTodo
+      summary: Patch specific todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TodoPatch' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Todo' }
+        '404':
+          description: Not Found
+    delete:
+      operationId: deleteTodo
+      summary: Delete a specific todo
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
 components:
   schemas:
     Todo:
       type: object
-      required: [id, title, done]
+      required: [id, title, completed]
       properties:
         id:    { type: string, format: uuid }
         title: { type: string, minLength: 1 }
-        done:  { type: boolean }
+        completed:  { type: boolean }
     TodoCreate:
       type: object
       required: [title]
@@ -85,7 +123,13 @@ components:
         title: { type: string, minLength: 1 }
     TodoUpdate:
       type: object
-      required: [title, done]
+      required: [title, completed]
       properties:
         title: { type: string, minLength: 1 }
-        done:  { type: boolean }
+        completed:  { type: boolean }
+    TodoPatch:
+      type: object
+      required: []
+      properties:
+        title: { type: string, minLength: 1 }
+        completed:  { type: boolean }

@@ -71,7 +71,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>dev.timduerr.openapigeneratorexample.api</apiPackage>
+                            <apiPackage>dev.timduerr.openapigeneratorexample.web</apiPackage>
                             <modelPackage>dev.timduerr.openapigeneratorexample.model</modelPackage>
                             <invokerPackage>dev.timduerr.openapigeneratorexample.invoker</invokerPackage>
                             <modelNameSuffix>Dto</modelNameSuffix>
