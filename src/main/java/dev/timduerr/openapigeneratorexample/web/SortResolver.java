@@ -12,14 +12,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * SortHelper.
+ * SortResolver.
  *
  * @author Tim Dürr
  * @version 1.0
  */
-public class SortHelper {
+public class SortResolver {
 
-    private SortHelper() {
+    private SortResolver() {
     }
 
     /**
@@ -63,22 +63,45 @@ public class SortHelper {
     }
 
     /**
-     * Resolves the sort order based on the provided class, DTO class, and sort parameter.
+     * Represents the result of a sorting resolution process.
      *
-     * <p>This method determines the effective property for sorting and the sort direction
-     * (ascending or descending) based on `sortParam`. If the property is valid and
-     * exposed in both `clazz` and `dtoClass`, it will be used; otherwise, a default property
-     * ("title") is used.
+     * <p>This record encapsulates the resolved {@link Sort} configuration, the key used for sorting,
+     * and the direction in which the sort is applied.
      *
-     * @param clazz the class containing the properties to be checked for sortability.
-     * @param dtoClass the DTO class containing the properties to be checked for exposure.
-     * @param sortParam a string representing the sort property and direction
-     *                  (e.g., "-name" for descending order on "name").
-     * @return a {@link Sort.Order} object representing the sort property and direction.
+     * @param sort the resolved {@link Sort} object, containing the sort configuration.
+     * @param appliedKey the key or property name used for sorting.
+     * @param appliedDirection the direction of the sorting, either ascending or descending.
      */
-    public static Sort.Order resolveSortOrder(Class<?> clazz, Class<?> dtoClass, String sortParam) {
-        String effectiveProperty = "title";
-        Sort.Direction direction = Sort.Direction.ASC;
+    public record SortResolution(Sort sort, String appliedKey, Sort.Direction appliedDirection) {}
+
+    /**
+     * Represents a default sorting configuration with a property key and sort direction.
+     *
+     * <p>This record is used to define the default sorting behavior for a given entity or DTO.
+     *
+     * @param key       the name of the property to sort by.
+     * @param direction the direction of the sort, either ascending or descending.
+     */
+    public record DefaultSort(String key, Sort.Direction direction) {}
+
+    /**
+     * Resolves a sortable configuration based on provided input parameters, ensuring it adheres
+     * to both DTO and entity constraints while allowing for default behavior if no valid sort
+     * parameter is supplied.
+     *
+     * <p>If a valid sort parameter is provided, it is used to override the default sort key
+     * and direction, provided it meets specific criteria of being both exposed in the DTO
+     * and sortable in the entity class.
+     *
+     * @param dtoClass the class of the DTO (Data Transfer Object) that contains the exposed properties.
+     * @param entityClass the class of the entity that represents the database mapping.
+     * @param sortParam the user-specified sort parameter, which can include a direction prefix (e.g., "-" for descending).
+     * @param defaultSort the default sorting key and direction used if sortParam is invalid or missing.
+     * @return a {@link SortResolution} object that encapsulates the resolved sort configuration.
+     */
+    public static SortResolution resolve(Class<?> dtoClass, Class<?> entityClass, String sortParam, DefaultSort defaultSort) {
+        String effectiveProperty = defaultSort.key();
+        Sort.Direction direction = defaultSort.direction();
 
         if (sortParam != null && !sortParam.isBlank()) {
             String sortString = sortParam.trim();
@@ -90,12 +113,13 @@ public class SortHelper {
                 sortString = sortString.substring(1);
             }
 
-            if (isSortableProperty(clazz, sortString) && isDtoExposedProperty(dtoClass, sortString)) {
+            if (isSortableProperty(entityClass, sortString) && isDtoExposedProperty(dtoClass, sortString)) {
                 effectiveProperty = sortString;
             }
         }
 
-        return new Sort.Order(direction, effectiveProperty);
+        Sort sort = Sort.by(new Sort.Order(direction, effectiveProperty).ignoreCase());
+        return new SortResolution(sort, effectiveProperty, direction);
     }
 
     // Private helper methods

@@ -56,6 +56,14 @@ paths:
             completed-desc:
               value: -completed
               summary: Sort by completed (descending)
+        - in: query
+          name: q
+          description: Case-insensitive search term
+          required: false
+          schema:
+            type: string
+            minLength: 1
+          example: groceries
       responses:
         '200':
           description: OK
@@ -119,7 +127,7 @@ paths:
         schema:
           type: string
           format: uuid
-        example: 97dc478e-8272-48b6-9a89-909477e0f45e
+        example: 073c98bc-4fa0-4ede-b121-6be06c25977f
 
     get:
       operationId: getTodo
