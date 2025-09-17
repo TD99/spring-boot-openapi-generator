@@ -63,4 +63,54 @@ class SortResolverTest {
         assertEquals("title", sortResolution.appliedKey(), "Expected the default sort property to be used");
         assertEquals(Sort.Direction.DESC, sortResolution.appliedDirection(), "Expected the default sort direction to be used");
     }
+
+    /**
+     * Tests the sort resolution when the sort string contains an unknown direction.
+     */
+    @Test
+    void resolve_hiddenEntityProperty_notInDto_shouldFallback() {
+        var def = new SortResolver.DefaultSort("title", Sort.Direction.ASC);
+
+        var res = SortResolver.resolve(
+                DtoExposingOnlyTitle.class,
+                EntityWithHiddenProperty.class,
+                "secret", // exists in entity, but not in DTO
+                def);
+
+        assertEquals("title", res.appliedKey());
+        assertEquals(Sort.Direction.ASC, res.appliedDirection());
+    }
+
+    /**
+     * Tests the sort resolution when the sort string contains an unknown direction.
+     */
+    @Test
+    void resolve_exposedProperty_shouldWork() {
+        var def = new SortResolver.DefaultSort("title", Sort.Direction.ASC);
+
+        var res = SortResolver.resolve(
+                DtoExposingOnlyTitle.class,
+                EntityWithHiddenProperty.class,
+                "title", // exists in entity, and in DTO
+                def);
+
+        assertEquals("title", res.appliedKey());
+        assertEquals(Sort.Direction.ASC, res.appliedDirection());
+    }
+
+    /**
+     * A simple entity with a hidden property.
+     */
+    @SuppressWarnings("unused")
+    static class EntityWithHiddenProperty {
+        private String title;
+        private String secret;
+    }
+
+    /**
+     * A DTO that only exposes the title property.
+     * @param title The title.
+     */
+    record DtoExposingOnlyTitle(String title) {
+    }
 }
