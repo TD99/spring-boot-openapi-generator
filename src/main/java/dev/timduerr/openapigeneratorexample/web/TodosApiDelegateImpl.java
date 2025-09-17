@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -75,7 +76,9 @@ public class TodosApiDelegateImpl implements TodosApiDelegate {
     public ResponseEntity<TodoDto> createTodo(TodoCreateDto todoCreateDto) {
         TodoEntity newEntity = toTodoEntity(todoCreateDto);
         TodoEntity savedEntity = todoRepository.save(newEntity);
-        return ResponseEntity.ok(toTodoDto(savedEntity));
+
+        URI location = URI.create("/todos/" + savedEntity.getId());
+        return ResponseEntity.created(location).body(toTodoDto(savedEntity));
     }
 
     @Override
