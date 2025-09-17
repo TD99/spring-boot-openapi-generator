@@ -12,7 +12,7 @@ public class TestModels {
      * A simple entity.
      */
     @SuppressWarnings("unused")
-    public static class TestEntityWithHiddenProperty {
+    public static class TestEntity {
         private String fallback;
         private String title;
         private String secret;

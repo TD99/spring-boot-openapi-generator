@@ -84,17 +84,17 @@ public class SortResolver {
     public record DefaultSort(String key, Sort.Direction direction) {}
 
     /**
-     * Resolves sorting parameters into a {@link SortResolution} object based on the provided DTO class,
-     * entity class, sort parameter, and default sort configuration.
+     * Resolves the sorting configuration based on the provided parameters.
      *
-     * <p>It ensures that the resolved sort property is valid and exposed in both the DTO and entity classes,
-     * falling back to default sort settings if no valid sort parameter is provided.
+     * <p>This method determines the effective sorting key and direction by inspecting
+     * the sort parameter, defaults, and verifying property visibility within the specified
+     * DTO and entity classes.
      *
-     * @param dtoClass the class of the Data Transfer Object used for validation.
-     * @param entityClass the class of the entity used for validation.
-     * @param sortParam the sorting parameter provided as input, which may include a direction prefix.
-     * @param defaultSort the default sorting configuration to apply when no valid sort parameter is given.
-     * @return a {@link SortResolution} object containing the resolved sort configuration, property, and direction.
+     * @param dtoClass the class of the Data Transfer Object (DTO) for validation of exposed properties.
+     * @param entityClass the class of the entity for validation of sortable properties.
+     * @param sortParam the sorting parameter supplied by the client, which may specify key and direction.
+     * @param defaultSort the default sorting configuration used when no valid sort parameter is provided.
+     * @return a {@code SortResolution} object containing the resolved sort configuration, key, and direction.
      */
     public static SortResolution resolve(Class<?> dtoClass, Class<?> entityClass, String sortParam, DefaultSort defaultSort) {
         String effectiveProperty = defaultSort.key();
@@ -103,7 +103,6 @@ public class SortResolver {
         if (sortParam != null && !sortParam.isBlank()) {
             String sortString = sortParam.trim();
 
-            // Determine sort direction
             if (sortString.startsWith("-")) {
                 direction = Sort.Direction.DESC;
                 sortString = sortString.substring(1);
@@ -111,22 +110,16 @@ public class SortResolver {
                 sortString = sortString.substring(1);
             }
 
-            // Check for an exact match or case-insensitive match for exposed property
-            if (isSortableProperty(entityClass, sortString) && isDtoExposedProperty(dtoClass, sortString)) {
-                effectiveProperty = sortString;
-            } else {
-                String sortStringLowercase = sortString.toLowerCase();
-                if (isSortableProperty(entityClass, sortStringLowercase) && isDtoExposedProperty(dtoClass, sortStringLowercase)) {
-                    effectiveProperty = sortStringLowercase;
-                }
+            String sortStringLowercase = sortString.toLowerCase();
+            if (isSortableProperty(entityClass, sortStringLowercase) && isDtoExposedProperty(dtoClass, sortStringLowercase)) {
+                effectiveProperty = sortStringLowercase;
             }
         }
 
-        Sort sort = Sort.by(new Sort.Order(direction, effectiveProperty));
+        Sort sort = Sort.by(new Sort.Order(direction, effectiveProperty).ignoreCase());
         return new SortResolution(sort, effectiveProperty, direction);
     }
 
-    // Private helper methods
     /**
      * Determines if a specified field in a given class is marked to be ignored or hidden.
      *
@@ -175,6 +168,7 @@ public class SortResolver {
      * @param m the method to evaluate. If {@code null}, the method is not considered ignored.
      * @return {@code true} if the method is marked as ignored or hidden, {@code false} otherwise.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean isIgnored(Method m) {
         if (m == null) return false;
         if (m.isAnnotationPresent(JsonIgnore.class)) return true;

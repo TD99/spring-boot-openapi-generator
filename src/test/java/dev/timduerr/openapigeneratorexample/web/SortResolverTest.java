@@ -1,7 +1,7 @@
 package dev.timduerr.openapigeneratorexample.web;
 
 import dev.timduerr.openapigeneratorexample.TestModels.TestDtoNotExposingHiddenProperty;
-import dev.timduerr.openapigeneratorexample.TestModels.TestEntityWithHiddenProperty;
+import dev.timduerr.openapigeneratorexample.TestModels.TestEntity;
 import dev.timduerr.openapigeneratorexample.domain.TodoEntity;
 import dev.timduerr.openapigeneratorexample.model.TodoDto;
 import dev.timduerr.openapigeneratorexample.web.SortResolver.DefaultSort;
@@ -30,7 +30,7 @@ class SortResolverTest {
 
         assertEquals("title", sortResolution.appliedKey(), "Expected the default sort property to be used");
         assertEquals(Sort.Direction.ASC, sortResolution.appliedDirection(), "Expected the default sort direction to be used");
-        assertEquals(Sort.by(Sort.Order.by("title")), sortResolution.sort(), "Expected the default sort to be applied");
+        assertEquals(Sort.by(Sort.Order.by("title").ignoreCase()), sortResolution.sort(), "Expected the default sort to be applied");
     }
 
     /**
@@ -75,7 +75,7 @@ class SortResolverTest {
 
         SortResolution res = SortResolver.resolve(
                 TestDtoNotExposingHiddenProperty.class,
-                TestEntityWithHiddenProperty.class,
+                TestEntity.class,
                 "secret", // exists in entity, but not in DTO
                 def);
 
@@ -92,8 +92,36 @@ class SortResolverTest {
 
         SortResolution res = SortResolver.resolve(
                 TestDtoNotExposingHiddenProperty.class,
-                TestEntityWithHiddenProperty.class,
+                TestEntity.class,
                 "title", // exists in entity, and in DTO
+                def);
+
+        assertEquals("title", res.appliedKey());
+        assertEquals(Sort.Direction.ASC, res.appliedDirection());
+    }
+
+    @Test
+    void resolve_lowercaseProperty_shouldMatchLowercase() {
+        SortResolver.DefaultSort def = new SortResolver.DefaultSort("fallback", Sort.Direction.ASC);
+
+        SortResolution res = SortResolver.resolve(
+                TestDtoNotExposingHiddenProperty.class,
+                TestEntity.class,
+                "title",
+                def);
+
+        assertEquals("title", res.appliedKey());
+        assertEquals(Sort.Direction.ASC, res.appliedDirection());
+    }
+
+    @Test
+    void resolve_uppercaseProperty_shouldMatchLowercase() {
+        SortResolver.DefaultSort def = new SortResolver.DefaultSort("fallback", Sort.Direction.ASC);
+
+        SortResolution res = SortResolver.resolve(
+                TestDtoNotExposingHiddenProperty.class,
+                TestEntity.class,
+                "TITLE",
                 def);
 
         assertEquals("title", res.appliedKey());
