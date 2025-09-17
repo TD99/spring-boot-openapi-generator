@@ -85,19 +85,17 @@ public class SortResolver {
     public record DefaultSort(String key, Sort.Direction direction) {}
 
     /**
-     * Resolves a sortable configuration based on provided input parameters, ensuring it adheres
-     * to both DTO and entity constraints while allowing for default behavior if no valid sort
-     * parameter is supplied.
+     * Resolves sorting parameters into a {@link SortResolution} object based on the provided DTO class,
+     * entity class, sort parameter, and default sort configuration.
      *
-     * <p>If a valid sort parameter is provided, it is used to override the default sort key
-     * and direction, provided it meets specific criteria of being both exposed in the DTO
-     * and sortable in the entity class.
+     * <p>It ensures that the resolved sort property is valid and exposed in both the DTO and entity classes,
+     * falling back to default sort settings if no valid sort parameter is provided.
      *
-     * @param dtoClass the class of the DTO (Data Transfer Object) that contains the exposed properties.
-     * @param entityClass the class of the entity that represents the database mapping.
-     * @param sortParam the user-specified sort parameter, which can include a direction prefix (e.g., "-" for descending).
-     * @param defaultSort the default sorting key and direction used if sortParam is invalid or missing.
-     * @return a {@link SortResolution} object that encapsulates the resolved sort configuration.
+     * @param dtoClass the class of the Data Transfer Object used for validation.
+     * @param entityClass the class of the entity used for validation.
+     * @param sortParam the sorting parameter provided as input, which may include a direction prefix.
+     * @param defaultSort the default sorting configuration to apply when no valid sort parameter is given.
+     * @return a {@link SortResolution} object containing the resolved sort configuration, property, and direction.
      */
     public static SortResolution resolve(Class<?> dtoClass, Class<?> entityClass, String sortParam, DefaultSort defaultSort) {
         String effectiveProperty = defaultSort.key();
@@ -106,6 +104,7 @@ public class SortResolver {
         if (sortParam != null && !sortParam.isBlank()) {
             String sortString = sortParam.trim();
 
+            // Determine sort direction
             if (sortString.startsWith("-")) {
                 direction = Sort.Direction.DESC;
                 sortString = sortString.substring(1);
@@ -113,12 +112,18 @@ public class SortResolver {
                 sortString = sortString.substring(1);
             }
 
+            // Check for an exact match or case-insensitive match for exposed property
             if (isSortableProperty(entityClass, sortString) && isDtoExposedProperty(dtoClass, sortString)) {
                 effectiveProperty = sortString;
+            } else {
+                String sortStringLowercase = sortString.toLowerCase();
+                if (isSortableProperty(entityClass, sortStringLowercase) && isDtoExposedProperty(dtoClass, sortStringLowercase)) {
+                    effectiveProperty = sortStringLowercase;
+                }
             }
         }
 
-        Sort sort = Sort.by(new Sort.Order(direction, effectiveProperty).ignoreCase());
+        Sort sort = Sort.by(new Sort.Order(direction, effectiveProperty));
         return new SortResolution(sort, effectiveProperty, direction);
     }
 
