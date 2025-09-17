@@ -46,20 +46,19 @@ public class SortResolver {
     }
 
     /**
-     * Determines if a specified property of a given class is writable,
-     * indicating the property can be modified.
+     * Checks if a specified property in a given class is sortable.
      *
-     * <p>This method uses a bean introspection mechanism to check
-     * the writability of the property.
+     * <p>This method determines whether the specified property is readable
+     * and non-blank in the provided class.
      *
-     * @param clazz the class to inspect.
+     * @param clazz the class to inspect for the property.
      * @param property the name of the property to check.
-     * @return {@code true} if the property is writable; {@code false} otherwise.
+     * @return {@code true} if the property is sortable, {@code false} otherwise.
      */
     public static boolean isSortableProperty(Class<?> clazz, String property) {
         if (property == null || property.isBlank()) return false;
         BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
-        return beanWrapper.isWritableProperty(property);
+        return beanWrapper.isReadableProperty(property);
     }
 
     /**

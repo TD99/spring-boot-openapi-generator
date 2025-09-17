@@ -1,5 +1,7 @@
 package dev.timduerr.openapigeneratorexample.web;
 
+import dev.timduerr.openapigeneratorexample.TestModels.TestDtoNotExposingHiddenProperty;
+import dev.timduerr.openapigeneratorexample.TestModels.TestEntityWithHiddenProperty;
 import dev.timduerr.openapigeneratorexample.domain.TodoEntity;
 import dev.timduerr.openapigeneratorexample.model.TodoDto;
 import dev.timduerr.openapigeneratorexample.web.SortResolver.DefaultSort;
@@ -69,15 +71,15 @@ class SortResolverTest {
      */
     @Test
     void resolve_hiddenEntityProperty_notInDto_shouldFallback() {
-        var def = new SortResolver.DefaultSort("title", Sort.Direction.ASC);
+        SortResolver.DefaultSort def = new SortResolver.DefaultSort("fallback", Sort.Direction.ASC);
 
-        var res = SortResolver.resolve(
-                DtoExposingOnlyTitle.class,
-                EntityWithHiddenProperty.class,
+        SortResolution res = SortResolver.resolve(
+                TestDtoNotExposingHiddenProperty.class,
+                TestEntityWithHiddenProperty.class,
                 "secret", // exists in entity, but not in DTO
                 def);
 
-        assertEquals("title", res.appliedKey());
+        assertEquals("fallback", res.appliedKey());
         assertEquals(Sort.Direction.ASC, res.appliedDirection());
     }
 
@@ -86,31 +88,15 @@ class SortResolverTest {
      */
     @Test
     void resolve_exposedProperty_shouldWork() {
-        var def = new SortResolver.DefaultSort("title", Sort.Direction.ASC);
+        SortResolver.DefaultSort def = new SortResolver.DefaultSort("fallback", Sort.Direction.ASC);
 
-        var res = SortResolver.resolve(
-                DtoExposingOnlyTitle.class,
-                EntityWithHiddenProperty.class,
+        SortResolution res = SortResolver.resolve(
+                TestDtoNotExposingHiddenProperty.class,
+                TestEntityWithHiddenProperty.class,
                 "title", // exists in entity, and in DTO
                 def);
 
         assertEquals("title", res.appliedKey());
         assertEquals(Sort.Direction.ASC, res.appliedDirection());
-    }
-
-    /**
-     * A simple entity with a hidden property.
-     */
-    @SuppressWarnings("unused")
-    static class EntityWithHiddenProperty {
-        private String title;
-        private String secret;
-    }
-
-    /**
-     * A DTO that only exposes the title property.
-     * @param title The title.
-     */
-    record DtoExposingOnlyTitle(String title) {
     }
 }
