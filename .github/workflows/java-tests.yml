@@ -3,14 +3,14 @@ name: Java Tests
 on:
   push:
     branches:
-      - main
+      - 'main'
       - 'feature/**'
     paths:
       - 'src/**'
       - 'pom.xml'
   pull_request:
     branches:
-      - main
+      - 'main'
       - 'feature/**'
     paths:
       - 'src/**'
