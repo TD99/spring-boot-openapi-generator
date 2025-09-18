@@ -1,4 +1,6 @@
 # OpenAPI Generator Example
+[![Java Tests](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml/badge.svg)](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml)
+
 This project demonstrates how to use **OpenAPI Generator** with **Spring Boot 3**, **JPA**, and **Springdoc OpenAPI** to
 build a simple REST API for managing TODOs. It uses the delegate pattern to separate generated code from custom business
 logic.
@@ -26,12 +28,12 @@ mvn spring-boot:run
 ```
 
 ### API Endpoints
-- `GET /todos` → List all todos
-- `POST /todos` → Create a new todo
-- `GET /todos/{id}` → Get a todo by ID
-- `PUT /todos/{id}` → Update a todo
-- `PATCH /todos/{id}` → Patch a todo
-- `DELETE /todos/{id}` → Delete a todo
+- `GET /api/todos` → List all todos
+- `POST /api/todos` → Create a new todo
+- `GET /api/todos/{id}` → Get a todo by ID
+- `PUT /api/todos/{id}` → Update a todo
+- `PATCH /api/todos/{id}` → Patch a todo
+- `DELETE /api/todos/{id}` → Delete a todo
 
 > You may also import the [openapi.yaml](src/main/resources/openapi.yaml) file into your OpenAPI client such as Postman.
 
