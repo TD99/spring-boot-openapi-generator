@@ -71,6 +71,13 @@ If you are actively developing the frontend, you can run it alongside the Spring
   - Java 21+
   - Maven 3.9+
 
+#### Install Dependencies
+```bash
+# Install frontend dependencies
+cd frontend
+npm install
+```
+
 #### Build & Run
 Run backend and frontend separately:
 ```bash
@@ -82,8 +89,7 @@ mvn spring-boot:run
 ```
 
 ```bash
-# In another terminal, start the frontend dev server
-cd frontend
+# In another terminal, run the frontend development server
 npm start
 ```
 
