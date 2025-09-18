@@ -1,0 +1,11 @@
+<cdk-virtual-scroll-viewport itemSize="50" class="viewport" (scrolledIndexChange)="onScroll($event)">
+    <div *cdkVirtualFor="let todo of todos">
+        <div class="todo-item">
+            <span>{{ todo.id }}</span>
+            &nbsp;-&nbsp;
+            <span>{{ todo.title }}</span>
+            &nbsp;-&nbsp;
+            <input type="checkbox" [checked]="todo.completed" disabled />
+        </div>
+    </div>
+</cdk-virtual-scroll-viewport>
