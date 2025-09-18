@@ -79,7 +79,9 @@ mvn clean compile
 
 # Run the backend
 mvn spring-boot:run
+```
 
+```bash
 # In another terminal, start the frontend dev server
 cd frontend
 npm start
