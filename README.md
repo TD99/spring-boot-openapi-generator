@@ -1,7 +1,7 @@
 # OpenAPI Generator Example
-[![Java Tests](https://img.shields.io/github/actions/workflow/status/TD99/spring-boot-openapi-generator-example/java-tests.yml?label=Java%20Tests&color=%2332c955)](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml)
-[![Open Issues](https://img.shields.io/github/issues-raw/TD99/spring-boot-openapi-generator-example?label=Open%20Issues)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aopen&color=%23c5b33d)
-[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/TD99/spring-boot-openapi-generator-example?label=Closed%20Issues&color=%2332c955)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aclosed)
+[![Java Tests](https://img.shields.io/github/actions/workflow/status/TD99/spring-boot-openapi-generator-example/java-tests.yml?label=Java%20Tests&color=%233b8640)](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml)
+[![Open Issues](https://img.shields.io/github/issues-raw/TD99/spring-boot-openapi-generator-example?label=Open%20Issues)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aopen)
+[![Closed Issues](https://img.shields.io/github/issues-closed-raw/TD99/spring-boot-openapi-generator-example?label=Closed%20Issues&color=%233b8640)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aclosed)
 
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=flat&logo=spring&logoColor=white)
 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=flat&logo=angular&logoColor=white)
