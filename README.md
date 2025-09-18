@@ -90,7 +90,7 @@ mvn spring-boot:run
 
 ```bash
 # In another terminal, run the frontend development server
-npm start
+npm --prefix ./frontend start
 ```
 
 #### Endpoints
