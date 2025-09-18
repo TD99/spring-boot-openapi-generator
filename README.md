@@ -1,5 +1,6 @@
 # OpenAPI Generator Example
 [![Java Tests](https://img.shields.io/github/actions/workflow/status/TD99/spring-boot-openapi-generator-example/java-tests.yml?label=Java%20Tests&color=%233b8640)](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml)
+[![Angular Build](https://img.shields.io/github/actions/workflow/status/TD99/spring-boot-openapi-generator-example/angular-build.yml?label=Angular%20Build&color=%233b8640)](https://github.com/TD99/spring-boot-openapi-generator-example/actions/workflows/java-tests.yml)
 [![Open Issues](https://img.shields.io/github/issues-raw/TD99/spring-boot-openapi-generator-example?label=Open%20Issues)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aopen)
 [![Closed Issues](https://img.shields.io/github/issues-closed-raw/TD99/spring-boot-openapi-generator-example?label=Closed%20Issues&color=%233b8640)](https://github.com/TD99/spring-boot-openapi-generator-example/issues?q=is%3Aissue%20state%3Aclosed)
 
